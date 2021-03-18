@@ -54,28 +54,21 @@ client.connect(err => {
   app.get('/newCar', (req, res) =>{
     carCollection.find({}).sort({_id:-1}).limit(1)
     .toArray((err, documents) =>{
+
          res.send(documents);
     })
 })
-
-app.patch('/update/:id', (req, res) =>{
-
-    console.log(req.params.id , req.body.e)
-   carCollection.updateOne({_id: ObjectId(req.params.id)},
-     {
-       $set: { status: req.body.e}
-
-     })
-     .then(result =>{
-      res.send(result.modifiedCount>0)
-       
-     })
+app.delete('/delete/:id',(req, res) =>{
+    
+    carCollection.deleteOne({_id : ObjectId(req.params.id)})
+    .then(result =>{
+      
+      res.send(result.deletedCount >0);
 
     })
+  })
 
-    
-   
+});
 
-})
 
 app.listen(process.env.PORT||port )
